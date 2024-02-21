@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import java.text.NumberFormat;
 import java.util.Date;
 
 /**
@@ -153,6 +154,11 @@ public class Employee {
 	public void setSalary(Integer salary) {
 		this.salary = salary;
 	}
+
+	public String getFormattedSalary() {
+        NumberFormat format = NumberFormat.getInstance();
+        return format.format(this.salary);
+    }
 
 	public String getCharacteristics() {
 		return characteristics;

@@ -38,7 +38,8 @@
               aria-expanded="false"
             >
               <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span> <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
             <a
@@ -67,7 +68,7 @@
               </li>
             </ul>
             <p class="navbar-text navbar-right">
-              <span th:text="${administratorName}">山田太郎</span
+              <span th:text="${session.administratorName}">山田太郎</span
               >さんこんにちは！ &nbsp;&nbsp;&nbsp;
               <a
                 href="../administrator/login.html"
@@ -84,7 +85,7 @@
 
       <!-- パンくずリスト -->
       <ol class="breadcrumb">
-        <li>従業員リスト</li>
+        <li><a href="list.html" th:href="@{/employee/showList}">従業員リスト</a></li>
         <li class="active">従業員詳細</li>
       </ol>
 
@@ -132,7 +133,7 @@
                   <tr>
                     <th nowrap>入社日</th>
                     <td>
-                      <span th:utext="${employee.hireDate}">2012/11/29</span>
+                      <span th:utext="${#dates.format(employee.hireDate, 'yyyy年MM月dd日')}">2012/11/29</span>
                     </td>
                   </tr>
                   <tr>
@@ -168,7 +169,7 @@
                   <tr>
                     <th nowrap>給料</th>
                     <td>
-                      <span th:utext="${employee.salary + '円'}">400000円</span>
+                      <span th:utext="${employee.formattedSalary} + '円'">400,000円</span>
                     </td>
                   </tr>
                   <tr>
@@ -221,6 +222,6 @@
     </div>
     <!-- end container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="../../static/js/bootstrap.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
   </body>
 </html>

@@ -14,6 +14,7 @@ import com.example.form.InsertAdministratorForm;
 import com.example.form.LoginForm;
 import com.example.service.AdministratorService;
 
+import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.HttpSession;
 
 /**
@@ -71,13 +72,32 @@ public class AdministratorController {
 	 * @param form 管理者情報用フォーム
 	 * @return ログイン画面へリダイレクト
 	 */
+	// @ResponseBody
 	@PostMapping("/insert")
-	public String insert(InsertAdministratorForm form) {
+	public String insert(InsertAdministratorForm form, RedirectAttributes redirectAttributes) {
+		if (form.getName() == null || form.getName().isEmpty() || 
+			form.getMailAddress() == null || form.getMailAddress().isEmpty() || 
+			form.getPassword() == null || form.getPassword().isEmpty() ||
+			form.getConfirmPassword() == null || form.getConfirmPassword().isEmpty()) {
+			redirectAttributes.addFlashAttribute("errorMessage", "全てのフィールドを入力してください。");
+			return "redirect:/toInsert";
+		}
+		if (!form.getPassword().equals(form.getConfirmPassword())) {
+			redirectAttributes.addFlashAttribute("errorMessage", "パスワードと確認用パスワードが一致しません。");
+			return "redirect:/toInsert";
+		}
+
+		Administrator existingAdministrator = administratorService.findByMailAddress(form.getMailAddress());
+		if (existingAdministrator != null) {
+			redirectAttributes.addFlashAttribute("errorMessage", "入力されたメールアドレスは既に登録されています。");
+			return "redirect:/toInsert";
+		}
+
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
-		return "employee/list";
+		return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////
@@ -106,6 +126,8 @@ public class AdministratorController {
 			redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return "redirect:/";
 		}
+		session.setAttribute("administratorName", administrator.getName());
+		session.setAttribute("loggedIn", true);
 		return "redirect:/employee/showList";
 	}
 

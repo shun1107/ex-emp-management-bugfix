@@ -54,6 +54,13 @@
                 </legend>
                 <!-- 氏名 -->
                 <div class="form-group">
+                  <div th:if="${errorMessage}" class="alert alert-danger">
+                    <p th:text="${errorMessage}">
+                      ここにエラーメッセージが出る
+                    </p>
+                  </div>
+                </div>
+                <div class="form-group">
                   <div class="row">
                     <div class="col-sm-12">
                       <label for="name"> 氏名: </label>
@@ -118,6 +125,30 @@
                         class="form-control"
                         placeholder="password"
                         th:field="*{password}"
+                        th:errorclass="error-input"
+                        value="xxxxxxxx"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!-- 確認用パスワード -->
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <label for="confirmPassword"> 確認用パスワード: </label>
+                      <label
+                        th:errors="*{confirmPassword}"
+                        class="error-messages"
+                      >
+                        パスワードを入力してください
+                      </label>
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        class="form-control"
+                        placeholder="confirmPassword"
+                        th:field="*{confirmPassword}"
                         th:errorclass="error-input"
                         value="xxxxxxxx"
                       />

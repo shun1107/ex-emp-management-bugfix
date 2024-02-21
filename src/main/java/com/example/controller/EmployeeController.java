@@ -45,14 +45,53 @@ public class EmployeeController {
 	/////////////////////////////////////////////////////
 	/**
 	 * 従業員一覧画面を出力します.
-	 * 
+	 * @param page 表示するページ番号
 	 * @param model モデル
 	 * @return 従業員一覧画面
 	 */
+	// @GetMapping("/showList")
+	// public String showList(@RequestParam(name = "page", defaultValue = "1") int page, Model model) {
+	// 	//1ページに表示する従業員の数を設定
+	// 	int pageSize = 10;
+	// 	//指定ページの従業員一覧を取得
+	// 	List<Employee> employeeList = employeeService.findEmployeesByPage(page, pageSize);
+	// 	//ページング情報を設定
+	// 	int totalEmployees = employeeService.countEmployees();
+	// 	int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+	// 	int nextPage = Math.min(page + 1, totalPages);
+	// 	int prevPage = Math.max(page - 1, 1);
+
+	// 	model.addAttribute("employeeList", employeeList);
+	// 	model.addAttribute("currentPage", page);
+	// 	model.addAttribute("totalPages", totalPages);
+	// 	model.addAttribute("nextPage", nextPage);
+	// 	model.addAttribute("prevPage", prevPage);
+	// 	return "employee/list";
+	// }
+
 	@GetMapping("/showList")
-	public String showList(Model model) {
-		List<Employee> employeeList = employeeService.showList();
+	public String showList(
+		@RequestParam(name = "page", defaultValue = "1") int page,
+		@RequestParam(value = "name", required = false) String name,
+		Model model) {
+		int pageSize = 10;
+		List<Employee> employeeList;
+		if (name != null && !name.isEmpty()) {
+			employeeList = employeeService.search(name, page, pageSize);
+		} else {
+			employeeList = employeeService.search(name, page, pageSize);
+		}
+
+		int totalEmployees = employeeService.countEmployees();
+		int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+		int nextPage = Math.min(page + 1, totalPages);
+		int prevPage = Math.max(page - 1, 1);
+
 		model.addAttribute("employeeList", employeeList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("nextPage", nextPage);
+		model.addAttribute("prevPage", prevPage);
 		return "employee/list";
 	}
 
@@ -94,17 +133,43 @@ public class EmployeeController {
 		return "redirect:/employee/showList";
 	}
 
+	// @GetMapping("/search")
+    // public String searchEmployees(
+    //     @RequestParam(value = "name", required = false) String name, Model model) {
+    //     List<Employee> employees = employeeService.search(name);
+	// 	if(employees.isEmpty()){
+	// 		model.addAttribute("errorMessage", "１件もありませんでした");
+	// 		employees = employeeService.findAll();
+	// 	}
+
+    //     model.addAttribute("employeeList", employees);
+
+    //     return "employee/list";
+    // }
+
 	@GetMapping("/search")
-    public String searchEmployees(
-        @RequestParam(value = "name", required = false) String name, Model model) {
-        List<Employee> employees = employeeService.search(name);
+	public String searchEmployees(
+		@RequestParam(value = "name", required = false) String name,
+		@RequestParam(name = "page", defaultValue = "1") int page,
+		Model model) {
+		int pageSize = 10;
+		List<Employee> employees = employeeService.search(name, page, pageSize);
 		if(employees.isEmpty()){
 			model.addAttribute("errorMessage", "１件もありませんでした");
 			employees = employeeService.findAll();
 		}
-		
-        model.addAttribute("employeeList", employees);
 
-        return "employee/list";
-    }
+		int totalEmployees = employeeService.countEmployees();
+		int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+		int nextPage = Math.min(page + 1, totalPages);
+		int prevPage = Math.max(page - 1, 1);
+
+		model.addAttribute("employeeList", employees);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("nextPage", nextPage);
+		model.addAttribute("prevPage", prevPage);
+
+		return "employee/list";
+	}
 }

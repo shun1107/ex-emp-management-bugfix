@@ -13,6 +13,16 @@ public class InsertAdministratorForm {
 	private String mailAddress;
 	/** パスワード */
 	private String password;
+	/** 確認用パスワード */
+	private String confirmPassword;
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
 
 	public String getName() {
 		return name;

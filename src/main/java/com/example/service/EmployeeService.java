@@ -53,15 +53,29 @@ public class EmployeeService {
 		employeeRepository.update(employee);
 	}
 
-	public List<Employee> search(String name){
-		if(name == null || name.isEmpty()) {
-			return employeeRepository.findAll();
-		}else{
-			return employeeRepository.search(name);
-		}
-	}
+	// public List<Employee> search(String name){
+	// 	if(name == null || name.isEmpty()) {
+	// 		return employeeRepository.findAll();
+	// 	}else{
+	// 		return employeeRepository.search(name);
+	// 	}
+	// }
 
 	public List<Employee> findAll(){
 		return employeeRepository.findAll();
+	}
+
+	// public List<Employee> findEmployeesByPage(int page, int pageSize){
+	// 	int offset = (page - 1) * pageSize;
+	// 	return employeeRepository.findEmployeesByPage(offset, pageSize);
+	// }
+
+	public List<Employee> search(String name, int page, int pageSize){
+		int offset = (page - 1) * pageSize;
+		return employeeRepository.search(name, offset, pageSize);
+	}
+
+	public int countEmployees(){
+		return employeeRepository.countEmployees();
 	}
 }

@@ -24,7 +24,14 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body><br>
+    <form th:action="@{/employee/search}" method="get">
+      <input type="text" name="name" placeholder="名前を入力" />
+      <button type="submit">検索</button>
+    </form>
+    <div>
+      <p class="error-messages" th:text="${errorMessage}">ここにエラー文</p>
+    </div><br>
     <div class="container">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -38,7 +45,8 @@
               aria-expanded="false"
             >
               <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span> <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
             <a

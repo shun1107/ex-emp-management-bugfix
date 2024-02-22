@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.domain.Employee;
 import com.example.form.UpdateEmployeeForm;
@@ -82,11 +83,12 @@ public class EmployeeController {
 			employeeList = employeeService.search(name, page, pageSize);
 		}
 
-		int totalEmployees = employeeService.countEmployees();
+		int totalEmployees = employeeService.countSearchResults(name);
 		int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
 		int nextPage = Math.min(page + 1, totalPages);
 		int prevPage = Math.max(page - 1, 1);
 
+		model.addAttribute("name", name);
 		model.addAttribute("employeeList", employeeList);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
@@ -159,11 +161,17 @@ public class EmployeeController {
 			employees = employeeService.findAll();
 		}
 
-		int totalEmployees = employeeService.countEmployees();
+		// 検索結果の総数を取得
+		int totalEmployees = employeeService.countSearchResults(name);
 		int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+
+		// pageがtotalPagesを超える場合はtotalPagesに設定する
+		page = Math.min(page, totalPages);
+
 		int nextPage = Math.min(page + 1, totalPages);
 		int prevPage = Math.max(page - 1, 1);
 
+		model.addAttribute("name", name);
 		model.addAttribute("employeeList", employees);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
@@ -171,5 +179,12 @@ public class EmployeeController {
 		model.addAttribute("prevPage", prevPage);
 
 		return "employee/list";
+	}
+
+
+	@GetMapping("/searchAutocomplete")
+	@ResponseBody
+	public List<String> searchAutocomplete(@RequestParam("term") String term) {
+		return employeeService.findEmployeeNamesStartingWith(term);
 	}
 }

@@ -45,13 +45,12 @@
     <![endif]-->
   </head>
   <body><br>
-    <form th:action="@{/employee/search}" method="get">
-      <input type="text" id="employee-search" name="name" placeholder="従業員を検索できます" />
-      <button type="submit">検索</button>
-    </form>
-    <div>
-      <p class="error-messages" th:text="${errorMessage}">ここにエラー文</p>
-    </div><br>
+    <div style="text-align: right; padding-right: 200px;">
+      <form th:action="@{/employee/search}" method="get">
+          <input type="text" id="employee-search" name="name" placeholder="従業員を検索できます" />
+          <button type="submit">検索</button>
+      </form>
+    </div>
     <div class="container">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -111,9 +110,9 @@
       </nav>
 
       <!-- パンくずリスト -->
-      <ol class="breadcrumb">
+      <ol class="breadcrumb" th:if="${errorMessage == null or errorMessage.isEmpty()}">
         <li class="active">
-          <a href="list.html" th:href="@{/employee/showList}">従業員リスト</a>
+            <a href="list.html" th:href="@{/employee/showList}">従業員リスト</a>
         </li>
       </ol>
 
@@ -163,6 +162,10 @@
           <!-- ここから下を編集する必要はありません -->
         </div>
       </div>
+    </div>
+    <div th:if="${errorMessage}" style="text-align: center;">
+      <p class="error-messages" th:text="${errorMessage}">ここにエラー文</p>
+      <a href="/employee/showList" class="btn btn-primary">従業員リストに戻る</a>
     </div>
     <!-- end container -->
 

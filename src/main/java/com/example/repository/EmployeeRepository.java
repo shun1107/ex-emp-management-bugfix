@@ -138,6 +138,19 @@ public class EmployeeRepository {
 		return employees;
 	}
 
+	public List<Employee> search(int offset, int pageSize) {
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		StringBuilder sql = new StringBuilder("SELECT * FROM employees WHERE 1 = 1 ");
+
+		sql.append("ORDER BY hire_date DESC LIMIT :pageSize OFFSET :offset");
+		param.addValue("pageSize", pageSize);
+		param.addValue("offset", offset);
+	
+		List<Employee> employees = template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
+	
+		return employees;
+	}
+
 	public int countEmployees() {
 		String sql = "SELECT COUNT(*) FROM employees";
 		Integer count = template.queryForObject(sql, new MapSqlParameterSource(), Integer.class);

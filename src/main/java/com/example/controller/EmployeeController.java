@@ -77,11 +77,7 @@ public class EmployeeController {
 		Model model) {
 		int pageSize = 10;
 		List<Employee> employeeList;
-		if (name != null && !name.isEmpty()) {
-			employeeList = employeeService.search(name, page, pageSize);
-		} else {
-			employeeList = employeeService.search(name, page, pageSize);
-		}
+		employeeList = employeeService.search(name, page, pageSize);
 
 		int totalEmployees = employeeService.countSearchResults(name);
 		int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
@@ -157,8 +153,7 @@ public class EmployeeController {
 		int pageSize = 10;
 		List<Employee> employees = employeeService.search(name, page, pageSize);
 		if(employees.isEmpty()){
-			model.addAttribute("errorMessage", "１件もありませんでした");
-			employees = employeeService.findAll();
+			model.addAttribute("errorMessage", "１件もありませんでした。");
 		}
 
 		// 検索結果の総数を取得

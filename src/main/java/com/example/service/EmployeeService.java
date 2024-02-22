@@ -75,6 +75,11 @@ public class EmployeeService {
 		return employeeRepository.search(name, offset, pageSize);
 	}
 
+	public List<Employee> search(int page, int pageSize){
+		int offset = (page - 1) * pageSize;
+		return employeeRepository.search(offset, pageSize);
+	}
+
 	public int countEmployees(){
 		return employeeRepository.countEmployees();
 	}

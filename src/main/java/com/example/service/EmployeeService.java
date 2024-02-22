@@ -78,4 +78,12 @@ public class EmployeeService {
 	public int countEmployees(){
 		return employeeRepository.countEmployees();
 	}
+
+	public List<String> findEmployeeNamesStartingWith(String term) {
+		return employeeRepository.findEmployeeNamesStartingWith(term);
+	}
+
+	public int countSearchResults(String name){
+		return employeeRepository.countSearchResults(name);
+	}
 }

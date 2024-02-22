@@ -24,6 +24,10 @@
           border: 1px solid #000;
           text-decoration: none;
       }
+      .pagination .active {
+          background-color: #007bff;
+          color: white;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -42,7 +46,7 @@
   </head>
   <body><br>
     <form th:action="@{/employee/search}" method="get">
-      <input type="text" name="name" placeholder="名前を入力" />
+      <input type="text" id="employee-search" name="name" placeholder="従業員を検索できます" />
       <button type="submit">検索</button>
     </form>
     <div>
@@ -122,11 +126,11 @@
 
           <!-- ここにモックのtable要素を貼り付けます -->
           <div>
-            <ul class="pagination">
-                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
-                    <a th:if="${pageNumber != currentPage}" th:href="@{/employee/showList(page=${pageNumber})}" th:text="${pageNumber}"></a>
-                    <span th:if="${pageNumber == currentPage}" th:text="${pageNumber}"></span>
-                </li>
+            <ul class="pagination" th:if="${totalPages > 1}">
+              <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:classappend="${pageNumber == currentPage} ? 'active'">
+                <a th:if="${pageNumber != currentPage}" th:href="@{/employee/showList(name=${name}, page=${pageNumber})}" th:text="${pageNumber}"></a>
+                <span th:if="${pageNumber == currentPage}" th:text="${pageNumber}"></span>
+              </li>
             </ul>
           </div>
           <table class="table table-striped">
@@ -162,7 +166,12 @@
     </div>
     <!-- end container -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
+    <!-- 最初にjQueryを読み込む -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <!-- 次にjQuery UIを読み込む -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- その他のスクリプト -->
+  <script src="../../js/bootstrap.min.js"></script>
+  <script src="../../js/list.js"></script>
   </body>
 </html>

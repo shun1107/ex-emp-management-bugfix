@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+
 import com.example.domain.Employee;
 
 /**
@@ -140,6 +141,26 @@ public class EmployeeRepository {
 	public int countEmployees() {
 		String sql = "SELECT COUNT(*) FROM employees";
 		Integer count = template.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
+		return count;
+	}
+
+	public List<String> findEmployeeNamesStartingWith(String term) {
+		String sql = "SELECT name FROM employees WHERE name LIKE :term";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("term", term + "%");
+		return template.queryForList(sql, param, String.class);
+	}
+
+	public int countSearchResults(String name) {
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM employees WHERE 1 = 1 ");
+	
+		if (name != null) {
+			sql.append("AND name LIKE :name ");
+			param.addValue("name", "%" + name + "%");
+		}
+	
+		Integer count = template.queryForObject(sql.toString(), param, Integer.class);
+	
 		return count;
 	}
 }
